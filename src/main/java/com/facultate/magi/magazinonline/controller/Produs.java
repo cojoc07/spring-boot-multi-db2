@@ -62,8 +62,8 @@ public class Produs {
     }
 
     @DeleteMapping(path="produse/{produsId}")
-    public void deleteProductById(@PathVariable int productid){
-        jdbcTemplate.update("DELETE FROM V_PRODUS WHERE produs_id = :id", productid);
+    public void deleteProductById(@PathVariable BigDecimal produsId){
+        jdbcTemplate.update("DELETE FROM V_PRODUS WHERE produs_id = :id", produsId);
     }
 
 }
