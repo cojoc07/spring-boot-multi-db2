@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Transactional
+@SuppressWarnings("unchecked")
 public class Comanda {
 
     private final JdbcTemplate jdbcTemplate;
@@ -35,4 +38,15 @@ public class Comanda {
                 }});
     }
 
+    @GetMapping("comenzi/{comandaId}/factura")
+    public Object getInvoiceForOrder(@PathVariable String comandaId){
+        Map<String, Object> order = (Map<String, Object>) this.getOrderById(comandaId);
+
+        Map<String, Object> factura = jdbcTemplate.queryForList(
+                "SELECT * FROM V_FACTURA f WHERE f.comanda_id = :var", comandaId
+        ).get(0);
+
+        order.put("Factura aferenta", factura);
+        return order;
+    }
 }
