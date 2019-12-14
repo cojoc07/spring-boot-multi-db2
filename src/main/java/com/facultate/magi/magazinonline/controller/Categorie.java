@@ -31,7 +31,7 @@ public class Categorie {
                 .stream()
                 .findFirst()
                 .orElse(new HashMap<>() {{
-                    this.put("NOT FOUND ID", categoryId);
+                    this.put("Niciun rezultat pentru categorie id", categoryId);
                 }});
     }
 

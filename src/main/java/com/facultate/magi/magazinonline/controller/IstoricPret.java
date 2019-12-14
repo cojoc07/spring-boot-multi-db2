@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Transactional
@@ -31,8 +33,17 @@ public class IstoricPret {
                 .stream()
                 .findFirst()
                 .orElse(new HashMap<>() {{
-                    this.put("NOT FOUND ID", istoricId);
+                    this.put("Niciun rezultat pentru istoric id", istoricId);
                 }});
+    }
+
+    @GetMapping("istoric-preturi/{produsId}")
+    public Object getPreviousPriceByProductId(@PathVariable String produsId) {
+        List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT * FROM V_ISTORIC_PRET WHERE PRODUS_ID = :var", produsId);
+        if (result.size() == 0) {
+            return "Niciun rezultat pentru produs id " + produsId;
+        }
+        return result;
     }
 
 }
