@@ -79,8 +79,11 @@ public class Client {
         jdbcTemplate.update("INSERT INTO V_CLIENT(CLIENT_ID,NUME,PRENUME,EMAIL,TIP_CLIENT) " +
                         "VALUES(:id, :nume, :prenume, :email, :tipclient)", result, client.getNume(),
                                     client.getPrenume(), client.getEmail(), client.getTipClient());
-
-
         return nou;
+    }
+
+    @DeleteMapping(path="clienti/{clientId}")
+    public void deleteClientById(@PathVariable int clientId){
+        jdbcTemplate.update("DELETE FROM V_CLIENT WHERE client_id = :id", clientId);
     }
 }

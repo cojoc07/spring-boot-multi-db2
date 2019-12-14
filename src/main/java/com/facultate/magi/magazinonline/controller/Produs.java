@@ -1,12 +1,13 @@
 package com.facultate.magi.magazinonline.controller;
 
+import com.facultate.magi.magazinonline.controller.dto.ClientRequestRepresentation;
+import com.facultate.magi.magazinonline.controller.dto.ProdusRequestRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,25 @@ public class Produs {
             return "Niciun rezultat pentru categorie id " + categoryId;
         }
         return result;
+    }
+
+    @PostMapping(path="produse/adaugaProdus")
+    public ProdusRequestRepresentation createProduct(@RequestBody ProdusRequestRepresentation produs){
+
+        BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
+
+        jdbcTemplate.update("INSERT INTO V_PRODUS(PRODUS_ID,CATEGORIE_ID,COMANDA_ID,NUME_PRODUS,CULOARE,PRET) " +
+                        "VALUES(:id, :categorie_id, :comanda_id, :nume_produs, :culoare, :pret)", result, produs.getCategorie_id(),
+                produs.getComanda_id(), produs.getNume_produs(), produs.getCuloare(), produs.getPret());
+        //DML not legal?
+
+        return new ProdusRequestRepresentation(result, produs.getCategorie_id(),
+                produs.getComanda_id(), produs.getNume_produs(), produs.getCuloare(), produs.getPret());
+    }
+
+    @DeleteMapping(path="produse/{produsId}")
+    public void deleteProductById(@PathVariable int productid){
+        jdbcTemplate.update("DELETE FROM V_PRODUS WHERE produs_id = :id", productid);
     }
 
 }
