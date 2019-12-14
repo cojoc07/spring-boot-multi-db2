@@ -1,11 +1,12 @@
 package com.facultate.magi.magazinonline.controller;
 
+import com.facultate.magi.magazinonline.controller.dto.ClientRequestRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -67,5 +68,19 @@ public class Client {
         }
 
         return clientOrders;
+    }
+
+    @PostMapping(path="clienti/adaugaClient")
+    public Client createClient(@RequestBody ClientRequestRepresentation client){
+        Client nou = new Client(jdbcTemplate);
+
+        BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
+
+        jdbcTemplate.update("INSERT INTO V_CLIENT(CLIENT_ID,NUME,PRENUME,EMAIL,TIP_CLIENT) " +
+                        "VALUES(:id, :nume, :prenume, :email, :tipclient)", result, client.getNume(),
+                                    client.getPrenume(), client.getEmail(), client.getTipClient());
+
+
+        return nou;
     }
 }
