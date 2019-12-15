@@ -50,12 +50,16 @@ public class IstoricPret {
     @PostMapping("istoric-preturi/adaugaIstoric")
     public IstoricPretRequestRepresentation addHistoricPrice(@RequestBody IstoricPretRequestRepresentation istoric){
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
-        //TODO fix query
-        jdbcTemplate.update("INSERT INTO V_ISTORIC_PRET(PRODUS_ID,CATEGORIE_ID,COMANDA_ID,NUME_PRODUS,CULOARE,PRET) " +
-                        "VALUES(:id, :categorie_id, :comanda_id, :nume_produs, :culoare, :pret)", result, istoric.getProdus_id(),
+        jdbcTemplate.update("INSERT INTO V_ISTORIC_PRET(ISTORIC_PRET_ID,PRODUS_ID,DATA,PRET) " +
+                        "VALUES(:id, :produsid, :data, :pret)", result, istoric.getProdus_id(),
                             istoric.getData(), istoric.getPret());
 
         return new IstoricPretRequestRepresentation(result, istoric.getProdus_id(),
                 istoric.getData(), istoric.getPret());
+    }
+
+    @DeleteMapping(path="istoric-preturi/{istoricId}")
+    public void deleteHistoricPriceById(@PathVariable BigDecimal historicPriceId){
+        jdbcTemplate.update("DELETE FROM V_ISTORIC_PRET WHERE produs_id = :id", historicPriceId);
     }
 }

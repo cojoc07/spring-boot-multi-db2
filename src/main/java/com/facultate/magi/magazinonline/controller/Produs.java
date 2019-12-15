@@ -56,8 +56,7 @@ public class Produs {
                         "VALUES(:id, :categorie_id, :comanda_id, :nume_produs, :culoare, :pret)", result, produs.getCategorie_id(),
                 produs.getComanda_id(), produs.getNume_produs(), produs.getCuloare(), produs.getPret());
 
-        return new ProdusRequestRepresentation(result, produs.getCategorie_id(),
-                produs.getComanda_id(), produs.getNume_produs(), produs.getCuloare(), produs.getPret());
+        return produs;
     }
 
     @DeleteMapping(path="produse/{produsId}")
