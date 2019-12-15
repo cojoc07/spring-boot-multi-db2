@@ -55,7 +55,6 @@ public class Produs {
         jdbcTemplate.update("INSERT INTO V_PRODUS(PRODUS_ID,CATEGORIE_ID,COMANDA_ID,NUME_PRODUS,CULOARE,PRET) " +
                         "VALUES(:id, :categorie_id, :comanda_id, :nume_produs, :culoare, :pret)", result, produs.getCategorie_id(),
                 produs.getComanda_id(), produs.getNume_produs(), produs.getCuloare(), produs.getPret());
-        //DML not legal?
 
         return new ProdusRequestRepresentation(result, produs.getCategorie_id(),
                 produs.getComanda_id(), produs.getNume_produs(), produs.getCuloare(), produs.getPret());
