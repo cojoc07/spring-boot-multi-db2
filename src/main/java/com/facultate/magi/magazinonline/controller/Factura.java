@@ -42,9 +42,10 @@ public class Factura {
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 
-        jdbcTemplate.update("INSERT INTO V_FACTURA(FACTURA_ID,TOTAL_PRET,COMANDA_ID) " +
-                        "VALUES(:id, :totalpret, :comandaid)", result, factura.getTotalPret(), factura.getComanda_id());
-        //todo acest query crapa -> trigger de facturi nu mai compileaza
+        jdbcTemplate.update("INSERT INTO V_FACTURA(FACTURA_ID,TOTAL_PRET,COMANDA_ID,MODALITATE_PLATA) " +
+                        "VALUES(:id, :totalpret, :comandaid, :modalitateplata)", result, factura.getTotalPret(),
+                                factura.getComanda_id(), factura.getModalitate_plata());
+
         return factura;
     }
 

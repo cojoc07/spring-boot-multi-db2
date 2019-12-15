@@ -12,11 +12,14 @@ public class FacturaRequestRepresentation {
     private BigDecimal totalPret;
     @JsonProperty
     private int comanda_id;
+    @JsonProperty
+    private int modalitate_plata;
 
-    public FacturaRequestRepresentation(int id, BigDecimal totalPret, int comanda_id) {
+    public FacturaRequestRepresentation(int id, BigDecimal totalPret, int comanda_id, int modalitate_plata) {
         this.id = id;
         this.totalPret = totalPret;
         this.comanda_id = comanda_id;
+        this.modalitate_plata = modalitate_plata;
     }
 
     public int getId() {
@@ -41,5 +44,13 @@ public class FacturaRequestRepresentation {
 
     public void setComanda_id(int comanda_id) {
         this.comanda_id = comanda_id;
+    }
+
+    public int getModalitate_plata() {
+        return modalitate_plata;
+    }
+
+    public void setModalitate_plata(int modalitate_plata) {
+        this.modalitate_plata = modalitate_plata;
     }
 }
