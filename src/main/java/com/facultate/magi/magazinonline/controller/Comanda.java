@@ -43,11 +43,16 @@ public class Comanda {
     public Object getInvoiceForOrder(@PathVariable String comandaId){
         Map<String, Object> order = (Map<String, Object>) this.getOrderById(comandaId);
 
-        Map<String, Object> factura = jdbcTemplate.queryForList(
-                "SELECT * FROM V_FACTURA f WHERE f.comanda_id = :var", comandaId
-        ).get(0);
+        try{
+            Map<String, Object> factura = jdbcTemplate.queryForList(
+                    "SELECT * FROM V_FACTURA f WHERE f.comanda_id = :var", comandaId
+            ).get(0);
 
-        order.put("Factura aferenta", factura);
+            order.put("Factura aferenta", factura);
+            return order;
+        } catch (Exception e){
+            order.put("Nu exista factura pentru comanda cu id: ", comandaId);
+        }
         return order;
     }
 
@@ -56,10 +61,16 @@ public class Comanda {
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 
-        jdbcTemplate.update("INSERT INTO V_COMANDA(COMANDA_ID,OBSERVATII,CLIENT_ID) " +
-                        "VALUES(:id, :observatii, :client_id)", result, comanda.getObservatii(), comanda.getClient_id());
+        Client client = new Client(jdbcTemplate);
+        Map<String, Object> res = (Map<String, Object>) client.getClientById(comanda.getClient_id());
+        if (!res.containsKey("NOT FOUND ID")){
+            jdbcTemplate.update("INSERT INTO V_COMANDA(COMANDA_ID,OBSERVATII,CLIENT_ID) " +
+                    "VALUES(:id, :observatii, :client_id)", result, comanda.getObservatii(), comanda.getClient_id());
+            return comanda;
+        } else {
+            return new ComandaRequestRepresentation(0,"CLIENTUL SPECIFICAT NU EXISTA!", 0);
+        }
 
-        return comanda;
     }
 
     @DeleteMapping(path="comenzi/{comandaId}")

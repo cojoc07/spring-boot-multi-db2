@@ -31,7 +31,7 @@ public class Client {
     }
 
     @GetMapping("clienti/{clientId}")
-    public Object getClientById(@PathVariable String clientId) {
+    public Object getClientById(@PathVariable int clientId) {
         return jdbcTemplate.queryForList("SELECT * FROM V_CLIENT WHERE CLIENT_ID = :var", clientId)
                 .stream()
                 .findFirst()
@@ -41,7 +41,7 @@ public class Client {
     }
 
     @GetMapping("clienti/{clientId}/comenzi")
-    public Object getClientOrders(@PathVariable String clientId) {
+    public Object getClientOrders(@PathVariable int clientId) {
 
         Map<String, Object> client = (Map<String, Object>) this.getClientById(clientId);
 
@@ -55,7 +55,7 @@ public class Client {
     }
 
     @GetMapping("clienti/{clientId}/comenzi/produse")
-    public Object getClientOrdersWithProducts(@PathVariable String clientId) {
+    public Object getClientOrdersWithProducts(@PathVariable int clientId) {
 
         Map<String, Object> clientOrders = (Map<String, Object>) this.getClientOrders(clientId);
 
