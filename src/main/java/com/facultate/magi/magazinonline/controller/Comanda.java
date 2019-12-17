@@ -1,12 +1,13 @@
 package com.facultate.magi.magazinonline.controller;
 
+import com.facultate.magi.magazinonline.controller.dto.ComandaRequestRepresentation;
+import com.facultate.magi.magazinonline.controller.dto.ProdusRequestRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,5 +49,21 @@ public class Comanda {
 
         order.put("Factura aferenta", factura);
         return order;
+    }
+
+    @PostMapping(path="comenzi/adaugaComanda")
+    public ComandaRequestRepresentation createOrder(@RequestBody ComandaRequestRepresentation comanda){
+
+        BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
+
+        jdbcTemplate.update("INSERT INTO V_COMANDA(COMANDA_ID,OBSERVATII,CLIENT_ID) " +
+                        "VALUES(:id, :observatii, :client_id)", result, comanda.getObservatii(), comanda.getClient_id());
+
+        return comanda;
+    }
+
+    @DeleteMapping(path="comenzi/{comandaId}")
+    public void deleteOrderById(@PathVariable BigDecimal comandaId){
+        jdbcTemplate.update("DELETE FROM V_COMANDA WHERE comanda_id = :id", comandaId);
     }
 }
