@@ -30,7 +30,7 @@ public class Comanda {
     }
 
     @GetMapping("comenzi/{comandaId}")
-    public Object getOrderById(@PathVariable String comandaId) {
+    public Object getOrderById(@PathVariable int comandaId) {
         return jdbcTemplate.queryForList("SELECT * FROM V_COMANDA WHERE COMANDA_ID = :var", comandaId)
                 .stream()
                 .findFirst()
@@ -40,7 +40,7 @@ public class Comanda {
     }
 
     @GetMapping("comenzi/{comandaId}/factura")
-    public Object getInvoiceForOrder(@PathVariable String comandaId){
+    public Object getInvoiceForOrder(@PathVariable int comandaId){
         Map<String, Object> order = (Map<String, Object>) this.getOrderById(comandaId);
 
         try{

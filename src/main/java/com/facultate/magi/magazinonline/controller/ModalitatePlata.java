@@ -11,12 +11,12 @@ import java.util.HashMap;
 
 @RestController
 @Transactional
-public class ModalitatiPlata {
+public class ModalitatePlata {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ModalitatiPlata(JdbcTemplate jdbcTemplate) {
+    public ModalitatePlata(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -26,7 +26,7 @@ public class ModalitatiPlata {
     }
 
     @GetMapping("modalitati-plata/{modalitatePlata}")
-    public Object getPaymentMethodsById(@PathVariable String modalitatePlata) {
+    public Object getPaymentMethodsById(@PathVariable int modalitatePlata) {
         return jdbcTemplate.queryForList("SELECT * FROM V_MAT_MODALITATE_PLATA WHERE MODALITATE_PLATA_ID = :var", modalitatePlata)
                 .stream()
                 .findFirst()

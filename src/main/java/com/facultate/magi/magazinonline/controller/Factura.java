@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Transactional
+@SuppressWarnings("unchecked")
 public class Factura {
 
     private final JdbcTemplate jdbcTemplate;
@@ -38,15 +40,26 @@ public class Factura {
     }
 
     @PostMapping(path="facturi/adaugaFactura")
-    public FacturaRequestRepresentation createInvoice(@RequestBody FacturaRequestRepresentation factura){
+    public FacturaRequestRepresentation createInvoice(@RequestBody FacturaRequestRepresentation factura) throws Exception {
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 
-        jdbcTemplate.update("INSERT INTO V_FACTURA(FACTURA_ID,TOTAL_PRET,COMANDA_ID,MODALITATE_PLATA) " +
-                        "VALUES(:id, :totalpret, :comandaid, :modalitateplata)", result, factura.getTotalPret(),
-                                factura.getComanda_id(), factura.getModalitate_plata());
-
-        return factura;
+        ModalitatePlata mp = new ModalitatePlata(jdbcTemplate);
+        Map<String, Object> res = (Map<String, Object>) mp.getPaymentMethodsById(factura.getModalitate_plata());
+        if (!res.containsKey("NOT FOUND ID")){
+            Comanda com = new Comanda(jdbcTemplate);
+            Map<String, Object> res2 = (Map<String, Object>)com.getOrderById(factura.getComanda_id());
+            if (!res2.containsKey("NOT FOUND ID")){
+                jdbcTemplate.update("INSERT INTO V_FACTURA(FACTURA_ID,TOTAL_PRET,COMANDA_ID,MODALITATE_PLATA) " +
+                                "VALUES(:id, :totalpret, :comandaid, :modalitateplata)", result, factura.getTotalPret(),
+                        factura.getComanda_id(), factura.getModalitate_plata());
+                return factura;
+            } else {
+                throw new Exception("Comanda specificata nu exista");
+            }
+        } else {
+            throw new Exception("Modalitatea de plata specificata nu exista");
+        }
     }
 
     @DeleteMapping(path="facturi/{facturaId}")
