@@ -71,7 +71,7 @@ public class Client {
     }
 
     @PostMapping(path="clienti/adaugaClient")
-    public Client createClient(@RequestBody ClientRequestRepresentation client){
+    public Object createClient(@RequestBody ClientRequestRepresentation client){
         Client nou = new Client(jdbcTemplate);
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
@@ -79,7 +79,7 @@ public class Client {
         jdbcTemplate.update("INSERT INTO V_CLIENT(CLIENT_ID,NUME,PRENUME,EMAIL,TIP_CLIENT) " +
                         "VALUES(:id, :nume, :prenume, :email, :tipclient)", result, client.getNume(),
                                     client.getPrenume(), client.getEmail(), client.getTipClient());
-        return nou;
+        return this.getClientById(result.toBigInteger().intValue());
     }
 
     @DeleteMapping(path="clienti/{clientId}")

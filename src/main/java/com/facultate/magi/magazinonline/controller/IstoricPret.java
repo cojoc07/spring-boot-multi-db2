@@ -48,14 +48,13 @@ public class IstoricPret {
     }
 
     @PostMapping("istoric-preturi/adaugaIstoric")
-    public IstoricPretRequestRepresentation addHistoricPrice(@RequestBody IstoricPretRequestRepresentation istoric){
+    public Object addHistoricPrice(@RequestBody IstoricPretRequestRepresentation istoric){
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
         jdbcTemplate.update("INSERT INTO V_ISTORIC_PRET(ISTORIC_PRET_ID,PRODUS_ID,DATA,PRET) " +
                         "VALUES(:id, :produsid, :data, :pret)", result, istoric.getProdus_id(),
                             istoric.getData(), istoric.getPret());
 
-        return new IstoricPretRequestRepresentation(result, istoric.getProdus_id(),
-                istoric.getData(), istoric.getPret());
+        return this.getPreviousPriceById(result.toString());
     }
 
     @DeleteMapping(path="istoric-preturi/{istoricId}")

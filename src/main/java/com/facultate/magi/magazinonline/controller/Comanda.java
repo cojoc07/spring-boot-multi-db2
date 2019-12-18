@@ -57,7 +57,7 @@ public class Comanda {
     }
 
     @PostMapping(path="comenzi/adaugaComanda")
-    public ComandaRequestRepresentation createOrder(@RequestBody ComandaRequestRepresentation comanda){
+    public Object createOrder(@RequestBody ComandaRequestRepresentation comanda){
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 
@@ -66,7 +66,7 @@ public class Comanda {
         if (!res.containsKey("NOT FOUND ID")){
             jdbcTemplate.update("INSERT INTO V_COMANDA(COMANDA_ID,OBSERVATII,CLIENT_ID) " +
                     "VALUES(:id, :observatii, :client_id)", result, comanda.getObservatii(), comanda.getClient_id());
-            return comanda;
+            return this.getOrderById(result.toBigInteger().intValue());
         } else {
             return new ComandaRequestRepresentation(0,"CLIENTUL SPECIFICAT NU EXISTA!", 0);
         }

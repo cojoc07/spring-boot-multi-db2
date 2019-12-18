@@ -48,7 +48,7 @@ public class Produs {
     }
 
     @PostMapping(path="produse/adaugaProdus")
-    public ProdusRequestRepresentation createProduct(@RequestBody ProdusRequestRepresentation produs){
+    public Object createProduct(@RequestBody ProdusRequestRepresentation produs){
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 
@@ -56,7 +56,7 @@ public class Produs {
                         "VALUES(:id, :categorie_id, :comanda_id, :nume_produs, :culoare, :pret)", result, produs.getCategorie_id(),
                 produs.getComanda_id(), produs.getNume_produs(), produs.getCuloare(), produs.getPret());
 
-        return produs;
+        return this.getProductById(result.toString());
     }
 
     @DeleteMapping(path="produse/{produsId}")

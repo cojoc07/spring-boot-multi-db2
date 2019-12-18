@@ -40,7 +40,7 @@ public class Factura {
     }
 
     @PostMapping(path="facturi/adaugaFactura")
-    public FacturaRequestRepresentation createInvoice(@RequestBody FacturaRequestRepresentation factura) throws Exception {
+    public Object createInvoice(@RequestBody FacturaRequestRepresentation factura) throws Exception {
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 
@@ -53,7 +53,7 @@ public class Factura {
                 jdbcTemplate.update("INSERT INTO V_FACTURA(FACTURA_ID,TOTAL_PRET,COMANDA_ID,MODALITATE_PLATA) " +
                                 "VALUES(:id, :totalpret, :comandaid, :modalitateplata)", result, factura.getTotalPret(),
                         factura.getComanda_id(), factura.getModalitate_plata());
-                return factura;
+                return this.getBillById(result.toString());
             } else {
                 throw new Exception("Comanda specificata nu exista");
             }
