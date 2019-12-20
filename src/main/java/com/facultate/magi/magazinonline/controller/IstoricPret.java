@@ -38,12 +38,14 @@ public class IstoricPret {
                 }});
     }
 
-    @GetMapping("istoric-preturi/{produsId}")
+    @GetMapping("istoric-preturi/per-produs/{produsId}")
     public Object getPreviousPriceByProductId(@PathVariable String produsId) {
+
         List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT * FROM V_ISTORIC_PRET WHERE PRODUS_ID = :var", produsId);
         if (result.size() == 0) {
             return "Niciun rezultat pentru produs id " + produsId;
         }
+
         return result;
     }
 

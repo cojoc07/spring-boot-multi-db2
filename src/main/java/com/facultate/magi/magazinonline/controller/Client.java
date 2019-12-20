@@ -21,6 +21,9 @@ public class Client {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
+    Client nou;
+
+    @Autowired
     public Client(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -72,7 +75,6 @@ public class Client {
 
     @PostMapping(path="clienti/adaugaClient")
     public Object createClient(@RequestBody ClientRequestRepresentation client){
-        Client nou = new Client(jdbcTemplate);
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 

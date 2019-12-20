@@ -26,12 +26,12 @@ public class Categorie {
     }
 
     @GetMapping("categorii/{categorieId}")
-    public Object getCategoryById(@PathVariable String categoryId) {
-        return jdbcTemplate.queryForList("SELECT * FROM V_MAT_CATEGORIE WHERE CATEGORIE_ID = :var", categoryId)
+    public Object getCategoryById(@PathVariable int categorieId) {
+        return jdbcTemplate.queryForList("SELECT * FROM V_MAT_CATEGORIE WHERE CATEGORIE_ID = :var", categorieId)
                 .stream()
                 .findFirst()
                 .orElse(new HashMap<>() {{
-                    this.put("Niciun rezultat pentru categorie id", categoryId);
+                    this.put("Niciun rezultat pentru categorie id", categorieId);
                 }});
     }
 

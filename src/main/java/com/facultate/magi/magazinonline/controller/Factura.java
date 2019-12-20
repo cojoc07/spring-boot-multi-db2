@@ -23,6 +23,8 @@ public class Factura {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Autowired
+    ModalitatePlata mp;
 
     @GetMapping("facturi")
     public Object getAllBills() {
@@ -44,7 +46,6 @@ public class Factura {
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
 
-        ModalitatePlata mp = new ModalitatePlata(jdbcTemplate);
         Map<String, Object> res = (Map<String, Object>) mp.getPaymentMethodsById(factura.getModalitate_plata());
         if (!res.containsKey("NOT FOUND ID")){
             Comanda com = new Comanda(jdbcTemplate);

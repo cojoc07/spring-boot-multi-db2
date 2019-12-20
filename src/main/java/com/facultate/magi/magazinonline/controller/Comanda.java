@@ -20,6 +20,12 @@ public class Comanda {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
+    Client client;
+
+    @Autowired
+    private ModalitatePlata mp;
+
+    @Autowired
     public Comanda(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -49,6 +55,7 @@ public class Comanda {
             ).get(0);
 
             order.put("Factura aferenta", factura);
+
             return order;
         } catch (Exception e){
             order.put("Nu exista factura pentru comanda cu id: ", comandaId);
@@ -60,8 +67,7 @@ public class Comanda {
     public Object createOrder(@RequestBody ComandaRequestRepresentation comanda){
 
         BigDecimal result = (BigDecimal) jdbcTemplate.queryForList("select db1_global.sqnc.nextval from dual").get(0).get("NEXTVAL");
-
-        Client client = new Client(jdbcTemplate);
+        
         Map<String, Object> res = (Map<String, Object>) client.getClientById(comanda.getClient_id());
         if (!res.containsKey("NOT FOUND ID")){
             jdbcTemplate.update("INSERT INTO V_COMANDA(COMANDA_ID,OBSERVATII,CLIENT_ID) " +
