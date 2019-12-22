@@ -64,8 +64,8 @@ public class Factura {
     }
 
     @DeleteMapping(path="facturi/{facturaId}")
-    public void deleteInvoiceById(@PathVariable int invoiceId){
-        jdbcTemplate.update("DELETE FROM V_FACTURA WHERE FACTURA_ID = :id", invoiceId);
+    public void deleteInvoiceById(@PathVariable int facturaId){
+        jdbcTemplate.update("DELETE FROM V_FACTURA WHERE FACTURA_ID = :id", facturaId);
     }
 
 }

@@ -187,15 +187,15 @@ BEGIN
       
       if tip_client = 'fizic' then
          insert into factura_f
-         values (:new.factura_id, :new.total_pret, :new.comanda_id);
+         values (:new.factura_id, :new.total_pret, :new.comanda_id, :new.modalitate_plata);
       else
          insert into factura_j@dblink
-         values (:new.factura_id, :new.total_pret, :new.comanda_id);
+         values (:new.factura_id, :new.total_pret, :new.comanda_id, :new.modalitate_plata);
       end if;
    else if deleting then
       select c.tip_client into tip_client 
       from v_client c left join v_comanda vc ON c.client_id = vc.client_id 
-      where vc.comanda_id = :new.comanda_id;
+      where vc.comanda_id = :old.comanda_id;
       
       if tip_client = 'fizic' then
           delete from factura_f
