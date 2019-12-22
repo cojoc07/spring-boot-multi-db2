@@ -59,8 +59,8 @@ public class IstoricPret {
         return this.getPreviousPriceById(result.toString());
     }
 
-    @DeleteMapping(path="istoric-preturi/{istoricId}")
-    public void deleteHistoricPriceById(@PathVariable BigDecimal historicPriceId){
-        jdbcTemplate.update("DELETE FROM V_ISTORIC_PRET WHERE produs_id = :id", historicPriceId);
+    @DeleteMapping("istoric-preturi/{istoricId}")
+    public void deleteHistoricPriceById(@PathVariable BigDecimal istoricId){
+        jdbcTemplate.update("DELETE FROM V_ISTORIC_PRET WHERE istoric_pret_id = :id", istoricId);
     }
 }
