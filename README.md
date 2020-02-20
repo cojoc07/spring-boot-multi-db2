@@ -1,6 +1,7 @@
 # spring-boot-multi-db2
 
-Exemplu de aplicatie 
+Exemplu de aplicatie Spring Boot ce ruleaza pe baze de date Oracle distribuite. 
+Am evitat folosirea JPA ca urmare a constrangerilor cerintei proiectului.
 
 Baza de date construita prin acest model, furnizeaza informatii privind functionarea unui magazin de electronice, cu tot ce inseamna posibilitatea de a gestiona clienti existenti si clienti noi, precum adaugarea de comenzi noi aferente clientilor. O comanda are o factura si o modalitate de plata asignata. Comanda poate avea multiple produse, iar un produs la randul sau, poate avea o categorie din care face parte, precum si o multitudine de inregistrari ale preturilor anterioare.
 
