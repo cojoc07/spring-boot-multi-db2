@@ -1,4 +1,4 @@
-# spring-boot-multi-db2
+# Spring Boot multi database web app
 
 Exemplu de aplicatie Spring Boot ce ruleaza pe baze de date Oracle distribuite. 
 
